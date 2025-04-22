@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YT Streamer</title>
+</head>
+<body>
+  <h2>Upload & Stream Video</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <label>MP4 Video:</label><br>
+    <input type="file" name="video" accept="video/mp4" required><br>
+    <label>Stream Key:</label><br>
+    <input type="text" name="stream_key" required><br>
+    <button type="submit">Start Stream</button>
+  </form>
+  <br>
+  <button onclick="stopStream()">Stop Stream</button>
+  <button onclick="deleteVideo()">Delete Video</button>
+  <p id="response"></p>
+
+<script>
+  const form = document.getElementById("uploadForm");
+  const response = document.getElementById("response");
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(form);
+    const res = await fetch("/start-stream", {
+      method: "POST",
+      body: formData
+    });
+    response.innerText = await res.text();
+  };
+
+  async function stopStream() {
+    const res = await fetch("/stop-stream", { method: "POST" });
+    response.innerText = await res.text();
+  }
+
+  async function deleteVideo() {
+    const res = await fetch("/delete-video", { method: "POST" });
+    response.innerText = await res.text();
+  }
+</script>
+</body>
+</html>
